@@ -32,3 +32,4 @@ def run():
         get_color()
         elapsed_time = time.time() - start_time
         print(elapsed_time)
+
