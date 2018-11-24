@@ -1,13 +1,16 @@
 import argparse
 
 import slave
+import master
+
 
 def run_slave(args):
-    print("slave")
-    slave.app.run(host="0.0.0.0")
+    slave.run()
+
 
 def run_master(args):
-    print("master")
+    master.run()
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

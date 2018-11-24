@@ -1,30 +1,34 @@
-from flask import Flask
-from flask import request
+import requests
+import time
 
-class RgbColor:
-    def __init__(self):
-        self.r = 0
-        self.g = 0
-        self.b = 0
-
-    def __str__(self):
-        return f"R: {self.r}, G: {self.g}, B: {self.b}"
+from common import RgbColor
 
 
-app = Flask(__name__)
-light = RgbColor()
+light_cmd = RgbColor()
 
-@app.route("/")
-def hello():
-    return "slave root path hello"
 
-@app.route("/color", methods=["GET","POST"])
-def color():
-    if request.method == "GET":
-        return str(light)
-    elif request.method == "POST":
-        light.r = request.json["r"]
-        light.g = request.json["g"]
-        light.b = request.json["b"]
-        return ""
+def get_color():
+    # get latest setting from MASTER
+    response = requests.get('http://127.0.0.1:5000/color')
+    response.raise_for_status()
+    new_light_setting = response.json()
+    print(f'new setting from Master {new_light_setting}')
 
+    # update locally stored setting
+    light_cmd.r = new_light_setting['r']
+    light_cmd.g = new_light_setting['g']
+    light_cmd.b = new_light_setting['b']
+
+    update_LEDS()
+
+
+def update_LEDS():
+    print('LEDs updated')
+
+
+def run():
+    while True:
+        start_time = time.time()
+        get_color()
+        elapsed_time = time.time() - start_time
+        print(elapsed_time)
