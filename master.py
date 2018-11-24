@@ -11,15 +11,6 @@ light_cmd_lock = Lock()
 light_cmd = RgbColor()
 UPDATE_FREQ_HZ = 30
 
-# def send_color(r,g,b):
-#     response = requests.put('http://127.0.0.1:5000/color', json = {"r":r, "g":g, "b":b})
-#     response.raise_for_status()
-
-# def get_color():
-#     response = requests.get('http://127.0.0.1:5000/color')
-#     response.raise_for_status()
-#     print(response.json())
-
 
 @app.route("/", methods=["GET"])
 def check_if_alive():
@@ -37,6 +28,7 @@ def color():
             light_cmd.r = request.json["r"]
             light_cmd.g = request.json["g"]
             light_cmd.b = request.json["b"]
+            light_cmd.w = request.json["w"]
         return ""
 
 
